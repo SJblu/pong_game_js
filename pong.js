@@ -40,7 +40,7 @@ function draw() {
   colisaoBordaBola()
   movimentoRaqueteEsquerda()
   //movimentoRaqueteDireita() //funcao para movimento da raquete manual 
-  //movimentoRaqueteCPU()
+  movimentoRaqueteCPU()
   colisaoBolaRaqueteCollideLib(xRaqueteEsquerda, yRaqueteEsquerda)
   colisaoBolaRaqueteCollideLib(xRaqueteDireita, yRaqueteDireita)
   desenhaPlacar()
