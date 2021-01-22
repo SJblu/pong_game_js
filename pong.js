@@ -7,12 +7,15 @@ let raio = bolaDiametro / 2
 //dimensao e coordenadas de partida da raquete
 let xRaqueteEsquerda = 20
 let yRaqueteEsquerda = 150
+let xRaqueteDireita = 560
+let yRaqueteDireita = 150
 let larguraRaquete = 20
 let alturaRaquete = 100
 
-//velocidade de movimento da bolinha
+//velocidade de movimento da bolinha e raquete CPU
 let velocidadeXBola = 4
 let velocidadeYBola = 4
+let velocidadeYCPU
 
 let colisao = false
 
@@ -25,12 +28,15 @@ function setup() {
 function draw() {
   background(0, 0, 0)
   desenhaBola()
-  desenhaRaqueteEsquerda()
+  desenhaRaquete(xRaqueteEsquerda, yRaqueteEsquerda)
+  desenhaRaquete(xRaqueteDireita, yRaqueteDireita)
   movimentoBola()
   colisaoBordaBola()
   movimentoRaqueteEsquerda()
-  //colisaoBolaRaqueteEsquerda()
-  colisaoBolaRaqueteEsquerdaCollideLib()
+  //movimentoRaqueteDireita() //funcao para movimento da raquete manual 
+  movimentoRaqueteCPU()
+  colisaoBolaRaqueteCollideLib(xRaqueteEsquerda, yRaqueteEsquerda)
+  colisaoBolaRaqueteCollideLib(xRaqueteDireita, yRaqueteDireita)
   
 }
   
@@ -38,8 +44,8 @@ function desenhaBola(){
   circle(xBola, yBola, bolaDiametro)
 }
 
-function desenhaRaqueteEsquerda(){
-  rect(xRaqueteEsquerda, yRaqueteEsquerda, larguraRaquete, alturaRaquete)
+function desenhaRaquete(x, y){
+  rect(x, y, larguraRaquete, alturaRaquete)
 }
 
 function movimentoBola(){
@@ -66,15 +72,32 @@ function movimentoRaqueteEsquerda(){
   }
 }
 
+//funcao para movimento manual da raquete Direita
+function movimentoRaqueteDireita(){
+  if (keyIsDown(LEFT_ARROW) && yRaqueteDireita > 0) {
+    yRaqueteDireita -= 10
+  }
+  if (keyIsDown(RIGHT_ARROW) && yRaqueteDireita < (height-alturaRaquete)) {
+    yRaqueteDireita += 10
+  }
+}
+
+//funcao para movimento automatico da raquete Direita
+function movimentoRaqueteCPU(){
+  velocidadeYCPU = yBola - yRaqueteDireita - (larguraRaquete / 2) - 30
+  yRaqueteDireita += velocidadeYCPU
+}
+
 //funcao de colisao substituida ao implementar biblioteca Collide2D
-function colisaoBolaRaqueteEsquerda(){
-  if (xBola-raio < (xRaqueteEsquerda + larguraRaquete) && yBola-raio < (yRaqueteEsquerda + alturaRaquete) && yBola+raio > yRaqueteEsquerda) {
+function colisaoBolaRaquete(x, y){
+  if (xBola-raio < (x + larguraRaquete) && yBola-raio < (y + alturaRaquete) && yBola+raio > y) {
     velocidadeXBola *= -1
    } 
 }
 
-function colisaoBolaRaqueteEsquerdaCollideLib(){
-  colisao = collideRectCircle(xRaqueteEsquerda, yRaqueteEsquerda, larguraRaquete, alturaRaquete, xBola, yBola, raio);
+//colisao da bolinha com as raquetes utilizando Collide2D
+function colisaoBolaRaqueteCollideLib(x, y){
+  colisao = collideRectCircle(x, y, larguraRaquete, alturaRaquete, xBola, yBola, raio);
   if(colisao){
     velocidadeXBola *= -1
   }
