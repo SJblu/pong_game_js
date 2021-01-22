@@ -4,6 +4,9 @@ let yBola = 200
 let bolaDiametro = 20
 let raio = bolaDiametro / 2
 
+//variavel de colisao da bolinha para uso da funcao do Collide2D
+let colisao = false
+
 //dimensao e coordenadas de partida da raquete
 let xRaqueteEsquerda = 20
 let yRaqueteEsquerda = 150
@@ -17,7 +20,10 @@ let velocidadeXBola = 4
 let velocidadeYBola = 4
 let velocidadeYCPU
 
-let colisao = false
+//placar de ponto
+let pontuacaoJogador1 = 0
+let pontuacaoJogador2 = 0
+
 
 //Dimensao do cenario
 function setup() {
@@ -34,10 +40,11 @@ function draw() {
   colisaoBordaBola()
   movimentoRaqueteEsquerda()
   //movimentoRaqueteDireita() //funcao para movimento da raquete manual 
-  movimentoRaqueteCPU()
+  //movimentoRaqueteCPU()
   colisaoBolaRaqueteCollideLib(xRaqueteEsquerda, yRaqueteEsquerda)
   colisaoBolaRaqueteCollideLib(xRaqueteDireita, yRaqueteDireita)
-  
+  desenhaPlacar()
+  marcaPonto()
 }
   
 function desenhaBola(){
@@ -100,5 +107,21 @@ function colisaoBolaRaqueteCollideLib(x, y){
   colisao = collideRectCircle(x, y, larguraRaquete, alturaRaquete, xBola, yBola, raio);
   if(colisao){
     velocidadeXBola *= -1
+  }
+}
+
+//desenha placar dos jogadores
+function desenhaPlacar(){
+  fill(255)
+  text(pontuacaoJogador1, 278, 26)
+  text(pontuacaoJogador2, 321, 26)
+}
+
+function marcaPonto(){
+  if(xBola > 590){
+    pontuacaoJogador1++
+  }
+  if(xBola < 10){
+    pontuacaoJogador2++
   }
 }
